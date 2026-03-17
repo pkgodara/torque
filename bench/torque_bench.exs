@@ -1,6 +1,6 @@
 # Benchmark: Torque vs simdjsone vs jiffy
 #
-# Run with: mix run bench/torque_bench.exs
+# Run with: MIX_ENV=bench mix run bench/torque_bench.exs
 
 # Realistic OpenRTB bid request (~1.3KB)
 openrtb_json =
@@ -169,7 +169,11 @@ Benchee.run(
   },
   warmup: 2,
   time: 5,
-  memory_time: 2
+  memory_time: 2,
+  percentiles: [50, 95, 99],
+  formatters: [
+    {Benchee.Formatters.Console, percentiles: [50, 95, 99]}
+  ]
 )
 
 IO.puts("\n=== PARSE + GET BENCHMARK (bidder hot path) ===\n")
@@ -195,7 +199,11 @@ Benchee.run(
   },
   warmup: 2,
   time: 5,
-  memory_time: 2
+  memory_time: 2,
+  percentiles: [50, 95, 99],
+  formatters: [
+    {Benchee.Formatters.Console, percentiles: [50, 95, 99]}
+  ]
 )
 
 IO.puts("\n=== ENCODE BENCHMARK ===\n")
@@ -213,5 +221,9 @@ Benchee.run(
   },
   warmup: 2,
   time: 5,
-  memory_time: 2
+  memory_time: 2,
+  percentiles: [50, 95, 99],
+  formatters: [
+    {Benchee.Formatters.Console, percentiles: [50, 95, 99]}
+  ]
 )
