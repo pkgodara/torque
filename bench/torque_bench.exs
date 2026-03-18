@@ -215,9 +215,12 @@ Benchee.run(
     "torque iodata (map)" => fn -> Torque.encode_to_iodata(bid_response) end,
     "torque iodata (proplist)" => fn -> Torque.encode_to_iodata(bid_response_proplist) end,
     "jiffy encode (proplist)" => fn -> :jiffy.encode(bid_response_proplist, [:force_utf8]) end,
+    "jiffy encode (map)" => fn -> :jiffy.encode(bid_response) end,
     "jason encode (map)" => fn -> Jason.encode!(bid_response) end,
     "otp json encode (iodata)" => fn -> :json.encode(bid_response) end,
-    "otp json encode (binary)" => fn -> :erlang.iolist_to_binary(:json.encode(bid_response)) end
+    "otp json encode (binary)" => fn -> :erlang.iolist_to_binary(:json.encode(bid_response)) end,
+    "simdjsone encode (proplist)" => fn -> :simdjson.encode(bid_response_proplist) end,
+    "simdjson encode (map)" => fn -> :simdjson.encode(bid_response) end
   },
   warmup: 2,
   time: 5,
