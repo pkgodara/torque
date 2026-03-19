@@ -1,7 +1,7 @@
 defmodule Torque.PointerTest do
   use ExUnit.Case, async: true
 
-  @openrtb_json ~s({
+  @sample_json ~s({
     "id": "req-123",
     "site": {
       "domain": "example.com",
@@ -46,7 +46,7 @@ defmodule Torque.PointerTest do
   })
 
   setup do
-    {:ok, doc} = Torque.parse(@openrtb_json)
+    {:ok, doc} = Torque.parse(@sample_json)
     %{doc: doc}
   end
 
@@ -150,7 +150,7 @@ defmodule Torque.PointerTest do
       assert [] = Torque.get_many(doc, [])
     end
 
-    test "all fields from bidder hot path", %{doc: doc} do
+    test "all fields", %{doc: doc} do
       paths = [
         "/id",
         "/site/domain",

@@ -35,7 +35,7 @@ Torque is a high-performance JSON library for Elixir using Rustler NIFs backed b
 
 ### Decoding Strategies
 
-1. **Parse + Get** — `parse/1` returns an opaque reference to a parsed document. `get/2,3` extracts fields by JSON Pointer (RFC 6901) path. `get_many/2` extracts multiple fields in a single NIF call. Ideal when only a subset of fields is needed (e.g. OpenRTB bid request processing).
+1. **Parse + Get** — `parse/1` returns an opaque reference to a parsed document. `get/2,3` extracts fields by JSON Pointer (RFC 6901) path. `get_many/2` extracts multiple fields in a single NIF call. Ideal when only a subset of fields is needed.
 
 2. **Full decode** — `decode/1` converts an entire JSON binary into Elixir terms in one pass.
 

@@ -2,8 +2,8 @@
 #
 # Run with: MIX_ENV=bench mix run bench/torque_bench.exs
 
-# Realistic OpenRTB bid request (~1.3KB)
-openrtb_json =
+# Sample JSON payload (~1.3KB)
+sample_json =
   Jason.encode!(%{
     "id" => "req-#{:rand.uniform(1_000_000)}",
     "site" => %{
@@ -73,9 +73,8 @@ openrtb_json =
     "ext" => %{"appnexus" => %{"seller_member_id" => 1410}}
   })
 
-IO.puts("JSON payload size: #{byte_size(openrtb_json)} bytes\n")
+IO.puts("JSON payload size: #{byte_size(sample_json)} bytes\n")
 
-# Fields extracted in the bidder hot path
 fields = [
   "/id",
   "/site/domain",
@@ -161,11 +160,11 @@ IO.puts("=== DECODE BENCHMARK ===\n")
 
 Benchee.run(
   %{
-    "torque decode" => fn -> Torque.decode!(openrtb_json) end,
-    "simdjsone decode" => fn -> :simdjson.decode(openrtb_json) end,
-    "jiffy decode" => fn -> :jiffy.decode(openrtb_json, [:return_maps]) end,
-    "jason decode" => fn -> Jason.decode!(openrtb_json) end,
-    "otp json decode" => fn -> :json.decode(openrtb_json) end
+    "torque decode" => fn -> Torque.decode!(sample_json) end,
+    "simdjsone decode" => fn -> :simdjson.decode(sample_json) end,
+    "jiffy decode" => fn -> :jiffy.decode(sample_json, [:return_maps]) end,
+    "jason decode" => fn -> Jason.decode!(sample_json) end,
+    "otp json decode" => fn -> :json.decode(sample_json) end
   },
   warmup: 2,
   time: 5,
@@ -176,24 +175,24 @@ Benchee.run(
   ]
 )
 
-IO.puts("\n=== PARSE + GET BENCHMARK (bidder hot path) ===\n")
+IO.puts("\n=== PARSE + GET BENCHMARK ===\n")
 
 Benchee.run(
   %{
     "torque parse+get" => fn ->
-      {:ok, doc} = Torque.parse(openrtb_json)
+      {:ok, doc} = Torque.parse(sample_json)
       for f <- fields, do: Torque.get(doc, f)
     end,
     "torque parse+get_many" => fn ->
-      {:ok, doc} = Torque.parse(openrtb_json)
+      {:ok, doc} = Torque.parse(sample_json)
       Torque.get_many(doc, fields)
     end,
     "torque parse+get_many_nil" => fn ->
-      {:ok, doc} = Torque.parse(openrtb_json)
+      {:ok, doc} = Torque.parse(sample_json)
       Torque.get_many_nil(doc, fields)
     end,
     "simdjsone parse+get" => fn ->
-      ref = :simdjson.parse(openrtb_json)
+      ref = :simdjson.parse(sample_json)
       for f <- fields, do: :simdjson.get(ref, f)
     end
   },

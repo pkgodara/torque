@@ -20,7 +20,7 @@ Add to your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:torque, "~> 0.1.1"}
+    {:torque, "~> 0.1.2"}
   ]
 end
 ```
@@ -120,7 +120,7 @@ For objects with duplicate keys, the last value wins.
 
 Apple M2 Pro, OTP 28, Elixir 1.19:
 
-### Decode (1.2 KB OpenRTB)
+### Decode (1.2 KB)
 
 | Library | ips | mean | median | p99 | memory |
 |---|---|---|---|---|---|
@@ -130,7 +130,7 @@ Apple M2 Pro, OTP 28, Elixir 1.19:
 | otp json | 127.5K | 7.84 μs | 7.50 μs | 13.54 μs | 7.73 KB |
 | jason | 104.1K | 9.61 μs | 8.92 μs | 18.96 μs | 9.54 KB |
 
-### Parse + Get (bidder hot path, 26 fields)
+### Parse + Get
 
 | Library | ips | mean | median | p99 | memory |
 |---|---|---|---|---|---|
@@ -139,7 +139,7 @@ Apple M2 Pro, OTP 28, Elixir 1.19:
 | torque parse+get | 158.0K | 6.33 μs | 5.75 μs | 13.79 μs | 2.80 KB |
 | simdjsone parse+get | 124.5K | 8.03 μs | 6.00 μs | 29.29 μs | 2.28 KB |
 
-### Encode (1.2 KB OpenRTB)
+### Encode (1.2 KB)
 
 | Library | ips | mean | median | p99 | memory |
 |---|---|---|---|---|---|
@@ -156,7 +156,7 @@ Apple M2 Pro, OTP 28, Elixir 1.19:
 | jason: map => binary | 374.8K | 2.67 μs | 2.38 μs | 6.29 μs | 3912 B |
 | simdjsone: map => iodata | 344.9K | 2.90 μs | 2.50 μs | 6.33 μs | 888 B |
 
-### Decode (~758 KB)
+### Decode (750 KB)
 
 | Library | ips | mean | median | p99 | memory |
 |---|---|---|---|---|---|
@@ -166,7 +166,7 @@ Apple M2 Pro, OTP 28, Elixir 1.19:
 | jason | 135.5 | 7.38 ms | 7.15 ms | 8.76 ms | 3.55 MB |
 | jiffy | 108.1 | 9.25 ms | 9.49 ms | 10.24 ms | 5.53 MB |
 
-### Encode (~758 KB)
+### Encode (750 KB)
 
 | Library | ips | mean | median | p99 | memory |
 |---|---|---|---|---|---|
