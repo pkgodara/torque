@@ -29,7 +29,7 @@ defmodule Torque.MixProject do
       {:ex_doc, "~> 0.35", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: :dev, runtime: false},
       {:jason, "~> 1.4"},
-      {:simdjsone, git: "https://github.com/saleyn/simdjsone.git", only: :bench},
+      {:simdjsone, "~> 0.5.0", only: :bench},
       {:jiffy, "~> 1.1", only: :bench},
       {:benchee, "~> 1.3", only: :bench}
     ]
