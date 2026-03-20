@@ -42,8 +42,43 @@ fn pointer_lookup<'v>(value: &'v sonic_rs::Value, path: &str) -> Option<&'v soni
             }
         }
         if segment.contains('~') {
-            let unescaped = segment.replace("~1", "/").replace("~0", "~");
-            current = object_get_last(current, &unescaped)?;
+            if segment.len() > 512 {
+                let unescaped = segment.replace("~1", "/").replace("~0", "~");
+                current = object_get_last(current, &unescaped)?;
+            } else {
+                let bytes = segment.as_bytes();
+                let mut tmp = [0u8; 512];
+                let mut out_len = 0usize;
+                let mut i = 0usize;
+                while i < bytes.len() {
+                    if bytes[i] == b'~' && i + 1 < bytes.len() {
+                        match bytes[i + 1] {
+                            b'1' => {
+                                tmp[out_len] = b'/';
+                                out_len += 1;
+                                i += 2;
+                            }
+                            b'0' => {
+                                tmp[out_len] = b'~';
+                                out_len += 1;
+                                i += 2;
+                            }
+                            _ => {
+                                tmp[out_len] = bytes[i];
+                                out_len += 1;
+                                i += 1;
+                            }
+                        }
+                    } else {
+                        tmp[out_len] = bytes[i];
+                        out_len += 1;
+                        i += 1;
+                    }
+                }
+                // SAFETY: input is valid UTF-8 &str; substitutions write only ASCII bytes
+                let unescaped = unsafe { std::str::from_utf8_unchecked(&tmp[..out_len]) };
+                current = object_get_last(current, unescaped)?;
+            }
         } else {
             current = object_get_last(current, segment)?;
         }
