@@ -102,11 +102,11 @@ defmodule Torque.EncodeTest do
     end
 
     test "invalid UTF-8 binary returns error" do
-      assert {:error, _} = Torque.encode(<<0x80>>)
+      assert {:error, :invalid_utf8} = Torque.encode(<<0x80>>)
     end
 
     test "invalid UTF-8 binary map key returns error" do
-      assert {:error, _} = Torque.encode(%{<<0x80>> => "value"})
+      assert {:error, :invalid_utf8} = Torque.encode(%{<<0x80>> => "value"})
     end
   end
 
@@ -116,7 +116,7 @@ defmodule Torque.EncodeTest do
     end
 
     test "unsupported term raises" do
-      assert_raise ArgumentError, fn ->
+      assert_raise ArgumentError, ~r/unsupported_type/, fn ->
         Torque.encode!(self())
       end
     end
@@ -134,7 +134,7 @@ defmodule Torque.EncodeTest do
     end
 
     test "unsupported term raises ArgumentError" do
-      assert_raise ArgumentError, fn ->
+      assert_raise ArgumentError, ~r/unsupported_type/, fn ->
         Torque.encode_to_iodata(self())
       end
     end

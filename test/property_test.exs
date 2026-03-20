@@ -475,7 +475,7 @@ defmodule Torque.PropertyTest do
 
     test "encode_to_iodata raises at depth 513" do
       term = Enum.reduce(1..513, "leaf", fn _, acc -> %{"x" => acc} end)
-      assert_raise ArgumentError, fn -> Torque.encode_to_iodata(term) end
+      assert_raise ArgumentError, ~r/nesting_too_deep/, fn -> Torque.encode_to_iodata(term) end
     end
   end
 
