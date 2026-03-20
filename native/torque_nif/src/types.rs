@@ -34,22 +34,17 @@ pub fn value_to_term<'a>(env: Env<'a>, value: &sonic_rs::Value, depth: u32) -> O
         } else {
             atoms::r#false().to_term(env)
         }),
-        JsonType::Number => Some(if value.is_i64() {
-            unsafe {
-                let n = value.as_i64().unwrap();
-                Term::new(env, rustler::sys::enif_make_int64(env.as_c_arg(), n))
+        JsonType::Number => {
+            if let Some(n) = value.as_i64() {
+                Some(unsafe { Term::new(env, rustler::sys::enif_make_int64(env.as_c_arg(), n)) })
+            } else if let Some(n) = value.as_u64() {
+                Some(unsafe { Term::new(env, rustler::sys::enif_make_uint64(env.as_c_arg(), n)) })
+            } else {
+                value.as_f64().map(|n| unsafe {
+                    Term::new(env, rustler::sys::enif_make_double(env.as_c_arg(), n))
+                })
             }
-        } else if value.is_u64() {
-            unsafe {
-                let n = value.as_u64().unwrap();
-                Term::new(env, rustler::sys::enif_make_uint64(env.as_c_arg(), n))
-            }
-        } else {
-            unsafe {
-                let n = value.as_f64().unwrap();
-                Term::new(env, rustler::sys::enif_make_double(env.as_c_arg(), n))
-            }
-        }),
+        }
         JsonType::String => Some(make_binary_term(env, value.as_str().unwrap())),
         JsonType::Array => {
             if depth == 0 {

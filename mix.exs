@@ -32,7 +32,7 @@ defmodule Torque.MixProject do
       {:stream_data, "~> 1.1", only: :test},
       {:simdjsone, "~> 0.5.0", only: :bench},
       {:jiffy, "~> 1.1", only: :bench},
-      {:benchee, "~> 1.3", only: :bench}
+      {:benchee, "~> 1.3", only: [:bench, :dev]}
     ]
   end
 

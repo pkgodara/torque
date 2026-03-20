@@ -13,3 +13,4 @@ rustler = "0.36"
 sonic-rs = "0.3"
 itoa = "1"
 ryu = "1"
+
