@@ -138,6 +138,14 @@ defmodule Torque.PointerTest do
       assert {:ok, "two"} = Torque.get(doc, "/2")
       assert {:ok, "ten"} = Torque.get(doc, "/10")
     end
+
+    test "nested numeric string object key id reachable via JSON Pointer" do
+      {:ok, doc} = Torque.parse(~s({"k1":"v1","k2":{"10":"ten","n1":"nv1"}}))
+      assert {:ok, "v1"} = Torque.get(doc, "/k1")
+      assert {:ok, %{"10" => "ten", "n1" => "nv1"}} = Torque.get(doc, "/k2")
+      assert {:ok, "ten"} = Torque.get(doc, "/k2/10")
+      assert {:ok, "nv1"} = Torque.get(doc, "/k2/n1")
+    end
   end
 
   describe "get_many/2" do
