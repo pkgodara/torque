@@ -132,6 +132,12 @@ defmodule Torque.PointerTest do
       assert geo["country"] == "US"
       assert geo["zip"] == "10001"
     end
+
+    test "numeric string object key is reachable via JSON Pointer" do
+      {:ok, doc} = Torque.parse(~s({"2":"two","10":"ten"}))
+      assert {:ok, "two"} = Torque.get(doc, "/2")
+      assert {:ok, "ten"} = Torque.get(doc, "/10")
+    end
   end
 
   describe "get_many/2" do
